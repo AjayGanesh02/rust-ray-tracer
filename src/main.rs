@@ -3,6 +3,9 @@ mod vec3;
 
 use crate::vec3::Vec3;
 fn main() {
+    let v1 = Vec3::newz();
+    let v2 = Vec3::new(1.0, 2.0, 3.0);
+    println!("{:?}", v1 + v2);
     let image_width = 256;
     let image_height = 256;
 
