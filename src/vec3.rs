@@ -12,11 +12,7 @@ pub trait FormatColor {
 
 impl FormatColor for Color {
     fn format_color(&self) -> String {
-        format!(
-            "{} {} {}",
-            (self.x * 255.999) as i32,
-            (self.y * 255.999) as i32,
-            (self.z * 255.999) as i32
-        )
+        let pixel_color = (*self * 255.999).as_ivec3();
+        format!("{} {} {}", pixel_color.x, pixel_color.y, pixel_color.z)
     }
 }

@@ -56,7 +56,7 @@ fn main() -> io::Result<()> {
             let ray_direction = pixel_center - CAMERA_CENTER;
 
             let cam_cur_ray = Ray::new(CAMERA_CENTER, ray_direction);
-            let cur_color = cam_cur_ray.ray_color();
+            let cur_color = cam_cur_ray.color();
             cur_color.format_color()
         })
         .chunks(IMAGE_WIDTH as usize)
