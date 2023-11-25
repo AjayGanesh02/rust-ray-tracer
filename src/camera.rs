@@ -13,7 +13,7 @@ use crate::{
 
 // IMAGE CONSTANTS
 const ASPECT_RATIO: f64 = 16.0 / 9.0;
-const IMAGE_WIDTH: u32 = 400;
+const IMAGE_WIDTH: u32 = 960;
 // calculate the image height, and ensure that it is at least 1
 const IMAGE_HEIGHT_UNFIXED: u32 = (IMAGE_WIDTH as f64 / ASPECT_RATIO) as u32;
 const IMAGE_HEIGHT: u32 = if IMAGE_HEIGHT_UNFIXED >= 1 {
@@ -37,6 +37,8 @@ const VIEWPORT_V: Vec3 = Vec3::new(0.0, -VIEWPORT_HEIGHT, 0.0);
 
 const MAX_VALUE: u32 = 255;
 const SAMPLES_PER_PIXEL: u32 = 10;
+
+const MAX_DEPTH: u32 = 10;
 
 pub struct Camera {
     pixel_delta_u: Vec3,
@@ -67,7 +69,7 @@ impl Camera {
             .map(|(y, x)| {
                 (0..SAMPLES_PER_PIXEL)
                     .into_iter()
-                    .map(|_| self.get_ray(x, y).color(&world))
+                    .map(|_| self.get_ray(x, y).color(&world, MAX_DEPTH))
                     .sum::<Vec3>()
                     .format_color(SAMPLES_PER_PIXEL)
             })
