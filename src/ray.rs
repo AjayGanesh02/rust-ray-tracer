@@ -1,6 +1,4 @@
-use crate::vec3::Vec3;
-
-type Point3 = Vec3;
+use crate::vec3::{Color, Point3, Vec3};
 
 pub struct Ray {
     pub origin: Point3,
@@ -8,7 +6,15 @@ pub struct Ray {
 }
 
 impl Ray {
+    pub fn new(origin: Point3, direction: Vec3) -> Ray {
+        Ray { origin, direction }
+    }
+
     pub fn at(&self, t: f64) -> Point3 {
         self.origin + t * self.direction
+    }
+
+    pub fn ray_color(&self) -> Color {
+        return Color::ZERO;
     }
 }

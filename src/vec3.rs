@@ -2,11 +2,15 @@ use glam::DVec3;
 
 pub type Vec3 = DVec3;
 
+pub type Point3 = Vec3;
+
+pub type Color = Vec3;
+
 pub trait FormatColor {
     fn format_color(&self) -> String;
 }
 
-impl FormatColor for Vec3 {
+impl FormatColor for Color {
     fn format_color(&self) -> String {
         format!(
             "{} {} {}",
