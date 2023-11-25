@@ -7,7 +7,7 @@ use crate::{
 #[derive(Clone)]
 pub enum Material {
     Lambertian { albedo: Color },
-    Metal { albedo: Color },
+    Metal { albedo: Color, fuzz: f64 },
 }
 
 impl Material {
@@ -29,11 +29,12 @@ impl Material {
                     },
                 })
             }
-            Self::Metal { albedo } => {
+            Self::Metal { albedo, fuzz } => {
                 let reflected = reflect(ray.direction.normalize(), hit_record.normal);
+                let scattered = reflected + fuzz.clamp(0., 1.) * random_unit_vector();
                 Some(ScatteredRay {
                     attenuation: *albedo,
-                    scattered: Ray::new(hit_record.point, reflected),
+                    scattered: Ray::new(hit_record.point, scattered),
                 })
             }
         }

@@ -21,9 +21,11 @@ fn main() -> Result<(), std::io::Error> {
     };
     let material_left = Material::Metal {
         albedo: Vec3::new(0.8, 0.8, 0.8),
+        fuzz: 0.1,
     };
     let material_right = Material::Metal {
         albedo: Vec3::new(0.8, 0.6, 0.2),
+        fuzz: 1.0,
     };
 
     let ground = Sphere::new(Vec3::new(0., -100.5, -1.), 100., material_ground);

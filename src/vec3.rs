@@ -1,5 +1,5 @@
 use glam::DVec3;
-use rand::random;
+use rand::prelude::*;
 
 pub type Vec3 = DVec3;
 

@@ -3,7 +3,7 @@ use std::fs;
 use indicatif::ProgressIterator;
 use itertools::Itertools;
 use log::info;
-use rand::{self, random};
+use rand::prelude::*;
 
 use crate::{
     hittable::Hittable,
@@ -28,7 +28,7 @@ const FOCAL_LENGTH: f64 = 1.0;
 const VIEWPORT_HEIGHT: f64 = 2.0;
 // less than 1 for viewport width is ok
 const VIEWPORT_WIDTH: f64 = VIEWPORT_HEIGHT * (IMAGE_WIDTH as f64 / IMAGE_HEIGHT as f64);
-const CAMERA_CENTER: Point3 = Vec3::ZERO;
+const CAMERA_CENTER: Point3 = Point3::ZERO;
 
 // calculate vectors along the horizontal and down the vertical edges
 
@@ -38,7 +38,7 @@ const VIEWPORT_V: Vec3 = Vec3::new(0.0, -VIEWPORT_HEIGHT, 0.0);
 const MAX_VALUE: u32 = 255;
 const SAMPLES_PER_PIXEL: u32 = 10;
 
-const MAX_DEPTH: u32 = 10;
+const MAX_DEPTH: u32 = 100;
 
 pub struct Camera {
     pixel_delta_u: Vec3,
