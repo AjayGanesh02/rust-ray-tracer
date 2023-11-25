@@ -1,6 +1,7 @@
+mod hittable;
 mod ray;
-mod vec3;
 mod sphere;
+mod vec3;
 
 use glam::DVec3;
 use indicatif::ProgressIterator;
@@ -9,7 +10,9 @@ use log::info;
 use std::{fs, io};
 
 use crate::{
+    hittable::Hittable,
     ray::Ray,
+    sphere::Sphere,
     vec3::{FormatColor, Point3, Vec3},
 };
 
@@ -41,6 +44,10 @@ const VIEWPORT_V: Vec3 = glam::DVec3::new(0.0, -VIEWPORT_HEIGHT, 0.0);
 const MAX_VALUE: u32 = 255;
 
 fn main() -> io::Result<()> {
+    let mut world: Vec<Box<dyn Hittable>> = vec![];
+    world.push(Box::new(Sphere::new(Vec3::new(0., 0., -1.), 0.5)));
+    world.push(Box::new(Sphere::new(Vec3::new(0., -100.5, -1.), 100.)));
+
     let pixel_delta_u = VIEWPORT_U / IMAGE_WIDTH as f64;
     let pixel_delta_v = VIEWPORT_V / IMAGE_HEIGHT as f64;
 
@@ -57,7 +64,7 @@ fn main() -> io::Result<()> {
             let ray_direction = pixel_center - CAMERA_CENTER;
 
             let cam_cur_ray = Ray::new(CAMERA_CENTER, ray_direction);
-            let cur_color = cam_cur_ray.color();
+            let cur_color = cam_cur_ray.color(&world);
             cur_color.format_color()
         })
         .chunks(IMAGE_WIDTH as usize)
