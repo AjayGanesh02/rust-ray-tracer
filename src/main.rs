@@ -1,6 +1,8 @@
+use indicatif::ProgressIterator;
+use itertools::Itertools;
+use log::info;
 use std::{fs, io};
 
-use itertools::Itertools;
 fn main() -> io::Result<()> {
     const IMAGE_WIDTH: u32 = 256;
     const IMAGE_HEIGHT: u32 = 256;
@@ -8,6 +10,7 @@ fn main() -> io::Result<()> {
 
     let pixels = (0..IMAGE_HEIGHT)
         .cartesian_product(0..IMAGE_WIDTH)
+        .progress_count(IMAGE_HEIGHT as u64 * IMAGE_WIDTH as u64)
         .map(|(y, x)| {
             let r = (x as f32) / ((IMAGE_WIDTH - 1) as f32);
             let g = (y as f32) / ((IMAGE_HEIGHT - 1) as f32);
@@ -24,7 +27,7 @@ fn main() -> io::Result<()> {
         .map(|chunk| chunk.into_iter().join(" "))
         .join("\n");
 
-    println!("{pixels}");
+    info!("{pixels}");
 
     fs::write(
         "output.ppm",
