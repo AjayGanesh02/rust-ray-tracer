@@ -1,5 +1,6 @@
 mod ray;
 mod vec3;
+mod sphere;
 
 use glam::DVec3;
 use indicatif::ProgressIterator;
