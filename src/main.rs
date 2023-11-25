@@ -1,30 +1,38 @@
-use log::info;
-mod vec3;
+use std::{fs, io};
 
-use crate::vec3::Vec3;
-fn main() {
-    let v1 = Vec3::newz();
-    let v2 = Vec3::new(1.0, 2.0, 3.0);
-    println!("{:?}", v1 + v2);
-    let image_width = 256;
-    let image_height = 256;
+use itertools::Itertools;
+fn main() -> io::Result<()> {
+    const IMAGE_WIDTH: u32 = 256;
+    const IMAGE_HEIGHT: u32 = 256;
+    const MAX_VALUE: u32 = 255;
 
-    println!("P3\n{} {}\n255", image_width, image_height);
-
-    for j in 0..image_height {
-        info!("\rScanlines remaining: {} ", image_height - j);
-        for i in 0..image_width {
-            let r = (i as f32) / ((image_width - 1) as f32);
-            let g = (j as f32) / ((image_height - 1) as f32);
+    let pixels = (0..IMAGE_HEIGHT)
+        .cartesian_product(0..IMAGE_WIDTH)
+        .map(|(y, x)| {
+            let r = (x as f32) / ((IMAGE_WIDTH - 1) as f32);
+            let g = (y as f32) / ((IMAGE_HEIGHT - 1) as f32);
             let b: f32 = 0.0;
 
             let ir = (255.999 * r) as i32;
             let ig = (255.999 * g) as i32;
             let ib = (255.999 * b) as i32;
 
-            println!("{} {} {}", ir, ig, ib);
-        }
-    }
+            format!("{ir} {ig} {ib}")
+        })
+        .chunks(IMAGE_WIDTH as usize)
+        .into_iter()
+        .map(|chunk| chunk.into_iter().join(" "))
+        .join("\n");
 
-    info!("\rDone.                 \n")
+    println!("{pixels}");
+
+    fs::write(
+        "output.ppm",
+        format!(
+            "P3
+{IMAGE_WIDTH} {IMAGE_HEIGHT}
+{MAX_VALUE}
+{pixels}"
+        ),
+    )
 }
