@@ -1,6 +1,7 @@
 use std::ops::Range;
 
 use crate::{
+    material::Material,
     ray::Ray,
     vec3::{Point3, Vec3},
 };
@@ -10,6 +11,7 @@ pub struct HitRecord {
     pub normal: Vec3,
     pub t: f64,
     pub front_face: bool,
+    pub material: Material,
 }
 
 fn calc_face_normal(ray: &Ray, normal: Vec3) -> (bool, Vec3) {
@@ -19,13 +21,20 @@ fn calc_face_normal(ray: &Ray, normal: Vec3) -> (bool, Vec3) {
 }
 
 impl HitRecord {
-    pub fn with_face_normal(point: Point3, outward_normal: Vec3, t: f64, ray: &Ray) -> Self {
+    pub fn with_face_normal(
+        point: Point3,
+        outward_normal: Vec3,
+        t: f64,
+        material: &Material,
+        ray: &Ray,
+    ) -> Self {
         let (front_face, normal) = calc_face_normal(ray, outward_normal);
         HitRecord {
             point,
             normal,
             t,
             front_face,
+            material: material.clone(),
         }
     }
 }

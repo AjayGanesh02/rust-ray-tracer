@@ -41,11 +41,15 @@ pub fn random_unit_vector() -> Vec3 {
     random_in_unit_sphere_vec3().normalize()
 }
 
-pub fn random_on_hemisphere(normal: Vec3) -> Vec3 {
-    let on_unit_sphere = random_unit_vector();
-    if on_unit_sphere.dot(normal) > 0.0 {
-        return on_unit_sphere;
-    } else {
-        return -on_unit_sphere;
-    }
+// pub fn random_on_hemisphere(normal: Vec3) -> Vec3 {
+//     let on_unit_sphere = random_unit_vector();
+//     if on_unit_sphere.dot(normal) > 0.0 {
+//         return on_unit_sphere;
+//     } else {
+//         return -on_unit_sphere;
+//     }
+// }
+
+pub fn reflect(v: Vec3, n: Vec3) -> Vec3 {
+    v - 2. * v.dot(n) * n
 }
