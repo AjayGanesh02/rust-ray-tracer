@@ -1,7 +1,23 @@
+use glam::DVec3;
 use indicatif::ProgressIterator;
 use itertools::Itertools;
 use log::info;
 use std::{fs, io};
+
+pub trait WriteColor {
+    fn write_color(&self) -> String;
+}
+
+impl WriteColor for glam::DVec3 {
+    fn write_color(&self) -> String {
+        format!(
+            "{} {} {}",
+            (self.x * 255.999) as i32,
+            (self.y * 255.999) as i32,
+            (self.z * 255.999) as i32
+        )
+    }
+}
 
 fn main() -> io::Result<()> {
     const IMAGE_WIDTH: u32 = 256;
@@ -12,15 +28,13 @@ fn main() -> io::Result<()> {
         .cartesian_product(0..IMAGE_WIDTH)
         .progress_count(IMAGE_HEIGHT as u64 * IMAGE_WIDTH as u64)
         .map(|(y, x)| {
-            let r = (x as f32) / ((IMAGE_WIDTH - 1) as f32);
-            let g = (y as f32) / ((IMAGE_HEIGHT - 1) as f32);
-            let b: f32 = 0.0;
+            let color = DVec3::new(
+                (x as f64) / ((IMAGE_WIDTH - 1) as f64), // r
+                (y as f64) / ((IMAGE_WIDTH - 1) as f64), // g
+                0.0,                                     // b
+            );
 
-            let ir = (255.999 * r) as i32;
-            let ig = (255.999 * g) as i32;
-            let ib = (255.999 * b) as i32;
-
-            format!("{ir} {ig} {ib}")
+            color.write_color()
         })
         .chunks(IMAGE_WIDTH as usize)
         .into_iter()
