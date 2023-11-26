@@ -49,7 +49,3 @@ pub fn random_unit_vector() -> Vec3 {
 //         return -on_unit_sphere;
 //     }
 // }
-
-pub fn reflect(v: Vec3, n: Vec3) -> Vec3 {
-    v - 2. * v.dot(n) * n
-}
