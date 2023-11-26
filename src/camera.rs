@@ -36,7 +36,7 @@ const VIEWPORT_U: Vec3 = Vec3::new(VIEWPORT_WIDTH, 0.0, 0.0);
 const VIEWPORT_V: Vec3 = Vec3::new(0.0, -VIEWPORT_HEIGHT, 0.0);
 
 const MAX_VALUE: u32 = 255;
-const SAMPLES_PER_PIXEL: u32 = 10;
+const SAMPLES_PER_PIXEL: u32 = 20;
 
 const MAX_DEPTH: u32 = 100;
 

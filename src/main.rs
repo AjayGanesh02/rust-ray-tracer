@@ -30,12 +30,14 @@ fn main() -> Result<(), std::io::Error> {
 
     let ground = Sphere::new(Vec3::new(0., -100.5, -1.), 100., material_ground);
     let center = Sphere::new(Vec3::new(0., 0., -1.), 0.5, material_center);
-    let left = Sphere::new(Vec3::new(-1., 0., -1.), 0.5, material_left);
+    let left = Sphere::new(Vec3::new(-1., 0., -1.), 0.5, material_left.clone());
+    let left_hollow = Sphere::new(Vec3::new(-1., 0., -1.), -0.4, material_left);
     let right = Sphere::new(Vec3::new(1., 0., -1.), 0.5, material_right);
 
     world.push(Box::new(ground));
     world.push(Box::new(center));
     world.push(Box::new(left));
+    world.push(Box::new(left_hollow));
     world.push(Box::new(right));
 
     Camera::new().render_to_disk(world, "output.ppm")

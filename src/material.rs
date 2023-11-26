@@ -1,3 +1,5 @@
+use rand::random;
+
 use crate::{
     hittable::HitRecord,
     ray::{Ray, ScatteredRay},
@@ -53,13 +55,14 @@ impl Material {
                 let sin_theta = (1. - cos_theta.powi(2)).sqrt();
                 let cannot_refract = refraction_ratio * sin_theta > 1.0;
 
-                let direction = if cannot_refract {
-                    // Must Reflect
-                    reflect(unit_direction, hit_record.normal)
-                } else {
-                    // Can Refract
-                    refract(unit_direction, hit_record.normal, refraction_ratio)
-                };
+                let direction =
+                    if cannot_refract || reflectance(cos_theta, refraction_ratio) > random() {
+                        // Must Reflect
+                        reflect(unit_direction, hit_record.normal)
+                    } else {
+                        // Can Refract
+                        refract(unit_direction, hit_record.normal, refraction_ratio)
+                    };
 
                 Some(ScatteredRay {
                     attenuation: Color::splat(1.),
@@ -70,13 +73,18 @@ impl Material {
     }
 }
 
-pub fn reflect(v: Vec3, n: Vec3) -> Vec3 {
+fn reflect(v: Vec3, n: Vec3) -> Vec3 {
     v - 2. * v.dot(n) * n
 }
 
-pub fn refract(uv: Vec3, n: Vec3, refraction_ratio: f64) -> Vec3 {
+fn refract(uv: Vec3, n: Vec3, refraction_ratio: f64) -> Vec3 {
     let cos_theta = (-uv).dot(n).clamp(f64::NEG_INFINITY, 1.);
     let r_out_perp = refraction_ratio * (uv + cos_theta * n);
     let r_out_para = (1.0 - r_out_perp.length_squared()).abs().sqrt() * -1. * n;
     r_out_perp + r_out_para
+}
+
+fn reflectance(cosine: f64, ref_idx: f64) -> f64 {
+    let r0 = ((1. - ref_idx) / (1. + ref_idx)).powi(2);
+    r0 + (1. - r0) * (1. - cosine).powi(5)
 }
