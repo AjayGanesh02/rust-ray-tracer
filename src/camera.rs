@@ -68,7 +68,6 @@ impl Camera {
             .progress_count(IMAGE_HEIGHT as u64 * IMAGE_WIDTH as u64)
             .map(|(y, x)| {
                 (0..SAMPLES_PER_PIXEL)
-                    .into_iter()
                     .map(|_| self.get_ray(x, y).color(&world, MAX_DEPTH))
                     .sum::<Vec3>()
                     .format_color(SAMPLES_PER_PIXEL)
